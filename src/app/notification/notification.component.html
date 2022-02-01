@@ -1,0 +1,9 @@
+<div class="notification"
+     [ngClass]="{
+      error: notification?.type === 'error',
+      message: notification?.type === 'message',
+      visible: notification !== null,
+      invisible: notification === null
+     }">
+  {{notification?.text}}
+</div>

@@ -1,0 +1,59 @@
+.repositories {
+  padding: 20px;
+  display: flex;
+  flex-flow: column;
+  width: 800px;
+  margin: 0 auto;
+}
+
+.repositories-input {
+  margin: 20px 0;
+}
+
+.repositories-formfield {
+  width: 100%;
+}
+
+.repository-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.repository {
+  display: flex;
+  flex-flow: column;
+  transition: transform 0.2s ease-in-out;
+}
+
+.repository:hover {
+  transform: scale(1.02);
+}
+
+.repository-star-icon {
+  vertical-align: bottom;
+}
+
+.repository-person-icon {
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+}
+
+.repository-owner-name {
+  height: 20px;
+}
+
+.repository-content {
+  flex: 1;
+  display: flex;
+  flex-flow: column;
+}
+
+.repository-link {
+  margin-top: auto;
+}
+
+.repository-get-more-button {
+  margin: 20px 0;
+}

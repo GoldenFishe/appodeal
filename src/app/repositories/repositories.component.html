@@ -1,0 +1,49 @@
+<div class="repositories">
+  <a routerLink="/auth">Change Api Token</a>
+  <div class="repositories-input">
+    <mat-form-field appearance="outline" class="repositories-formfield">
+      <mat-label>Enter GitHub Repository Name</mat-label>
+      <input matInput
+             width="100%"
+             type="search"
+             autofocus
+             name="repositoryName"
+             [formControl]="repositoryName">
+      <mat-hint>Max 100 characters</mat-hint>
+    </mat-form-field>
+  </div>
+  <div class="repository-list">
+    <mat-card class="repository" *ngFor="let repository of repositories">
+      <mat-card-header>
+        <div mat-card-avatar>
+          <img *ngIf="repository.owner.avatarUrl"
+               class="avatar"
+               [src]="repository.owner.avatarUrl"
+               alt="avatar"
+               width="40"
+               height="40">
+          <mat-icon *ngIf="!repository.owner.avatarUrl" class="repository-person-icon">person</mat-icon>
+        </div>
+        <mat-card-title>{{repository.name}}
+          <mat-icon class="repository-star-icon">star</mat-icon>
+          {{repository.stargazerCount}}</mat-card-title>
+        <mat-card-subtitle class="repository-owner-name">{{repository.owner.name}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="repository-content">
+        <p>{{repository.description}}</p>
+        <p [hidden]="!repository.latestRelease">Last release
+          was: {{repository.latestRelease?.createdAt | date:'longDate'}}</p>
+        <a [href]="repository.url" class="repository-link">Visit Repository</a>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <button mat-button
+          class="repository-get-more-button"
+          color="primary"
+          *ngIf="repositories.length"
+          (click)="getMoreRepositories()"
+          [disabled]="requestState.send">
+    Get more
+  </button>
+</div>
+
