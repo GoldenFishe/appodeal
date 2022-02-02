@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, Validators } from "@angular/forms";
-import { debounceTime, switchMap } from "rxjs";
+import { debounceTime, Subscription, switchMap } from "rxjs";
 
 import { RepositoriesService } from "./repositories.service";
 import { Repositories } from "./repositories.types";
@@ -10,7 +10,7 @@ import { Repositories } from "./repositories.types";
   templateUrl: "./repositories.component.html",
   styleUrls: ["./repositories.component.css"]
 })
-export class RepositoriesComponent implements OnInit {
+export class RepositoriesComponent implements OnInit, OnDestroy {
   repositoryName = new FormControl("", {
     validators: [
       Validators.required,
@@ -24,6 +24,7 @@ export class RepositoriesComponent implements OnInit {
     success: false,
     error: false
   };
+  getRepository$: Subscription | undefined;
 
   constructor(private repositoriesService: RepositoriesService) {
   }
@@ -31,7 +32,7 @@ export class RepositoriesComponent implements OnInit {
   getMoreRepositories() {
     this.requestState.send = true;
     this.itemsLimit += 10;
-    this.repositoriesService.getRepositoriesByName(this.repositoryName.value, this.itemsLimit).subscribe(repositories => {
+    this.getRepository$ = this.repositoriesService.getRepositoriesByName(this.repositoryName.value, this.itemsLimit).subscribe(repositories => {
       this.repositories = repositories;
       this.requestState = { send: false, success: true, error: false };
     });
@@ -41,8 +42,12 @@ export class RepositoriesComponent implements OnInit {
     this.subscribeToChangeRepositoryName();
   }
 
+  ngOnDestroy() {
+    this.getRepository$?.unsubscribe();
+  }
+
   private subscribeToChangeRepositoryName() {
-    this.repositoryName.valueChanges
+    this.getRepository$ = this.repositoryName.valueChanges
       .pipe(
         debounceTime(300),
         switchMap(repositoryName => {
